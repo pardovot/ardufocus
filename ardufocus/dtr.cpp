@@ -20,18 +20,16 @@
 #include "dtr.h"
 
 void dtr_disable() {
-  #ifdef ENABLE_DTR_RESET
-    if (g_config.dtr_reset == false) {
-      IO::set_as_output(DTR_RESET_PINOUT);
-    }
-  #endif
+#ifdef ENABLE_DTR_RESET
+  if (g_config.dtr_reset == false) {
+    IO::set_as_output(DTR_RESET_PINOUT);
+  }
+#endif
 }
 
-void dtr_reset(const bool& value) {
+void dtr_reset(const bool &value) {
   g_config.dtr_reset = value;
   eeprom_save(&g_config);
 }
 
-uint8_t dtr_reset_get() {
-  return (g_config.dtr_reset) ? 1 : 0;
-}
+uint8_t dtr_reset_get() { return (g_config.dtr_reset) ? 1 : 0; }

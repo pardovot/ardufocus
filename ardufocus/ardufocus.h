@@ -22,14 +22,14 @@
 
 #include "config.h"
 
+#include "analog.h"
+#include "dtr.h"
+#include "eeprom.h"
+#include "moonlite.h"
+#include "motordrv.h"
+#include "stepper.h"
+#include "ui.h"
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
-#include "eeprom.h"
-#include "dtr.h"
-#include "stepper.h"
-#include "motordrv.h"
-#include "analog.h"
-#include "moonlite.h"
-#include "ui.h"
 
 #endif

@@ -22,281 +22,279 @@
 
 #include "config.h"
 
-#include <stdint.h>
-#include <avr/wdt.h>
-#include <util/delay.h>
 #include "analog.h"
-#include "stepper.h"
 #include "dtr.h"
+#include "stepper.h"
+#include <avr/wdt.h>
+#include <stdint.h>
+#include <util/delay.h>
 
-//TODO https://stackoverflow.com/questions/553682/when-can-i-use-a-forward-declaration
+// TODO
+// https://stackoverflow.com/questions/553682/when-can-i-use-a-forward-declaration
 
 #ifdef MOTOR1_HAS_DRIVER
-extern stepper* g_motor1;
+extern stepper *g_motor1;
 #endif
 
 #ifdef MOTOR2_HAS_DRIVER
-extern stepper* g_motor2;
+extern stepper *g_motor2;
 #endif
 
-enum motor_t {
-  MOTOR_ONE,
-  MOTOR_TWO
-};
+enum motor_t { MOTOR_ONE, MOTOR_TWO };
 
 class api {
-  public:
-     api() {;}
-    ~api() {;}
+public:
+  api() { ; }
+  ~api() { ; }
 
-    static void update_temperature() {
-      Analog::read_async(NTC_ADC_CHANNEL);
+  static void update_temperature() { Analog::read_async(NTC_ADC_CHANNEL); }
+
+  static float get_temperature() {
+#ifdef START_TEMP_CONVERSION_ON_EVERY_GET
+    update_temperature();
+#endif
+
+    return util::steinhart(Analog::read(NTC_ADC_CHANNEL));
+  }
+
+  static void motor_start(const motor_t &idx) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      g_motor1->move();
+#endif
+      break;
+
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      g_motor2->move();
+#endif
+      break;
+
+    default:
+      break;
+    }
+  }
+
+  static void motor_stop(const motor_t &idx) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      g_motor1->halt();
+#endif
+      break;
+
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      g_motor2->halt();
+#endif
+      break;
+
+    default:
+      break;
+    }
+  }
+
+  static uint8_t motor_get_speed(const motor_t &idx) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      return g_motor1->get_speed();
+#endif
+      break;
+
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      return g_motor2->get_speed();
+#endif
+      break;
     }
 
-    static float get_temperature() {
-      #ifdef START_TEMP_CONVERSION_ON_EVERY_GET
-      update_temperature();
-      #endif
+    return 0;
+  }
 
-      return util::steinhart(Analog::read(NTC_ADC_CHANNEL));
+  static uint8_t motor_get_mode(const motor_t &idx) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      return g_motor1->get_step_mode();
+#endif
+      break;
+
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      return g_motor2->get_step_mode();
+#endif
+      break;
     }
 
-    static void motor_start(const motor_t& idx) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          g_motor1->move();
-          #endif
-          break;
+    return 0;
+  }
 
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          g_motor2->move();
-          #endif
-          break;
+  static uint8_t motor_is_moving(const motor_t &idx) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      return ((g_motor1->is_moving()) ? 1 : 0);
+#endif
+      break;
 
-        default: break;
-      }
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      return ((g_motor2->is_moving()) ? 1 : 0);
+#endif
+      break;
     }
 
-    static void motor_stop(const motor_t& idx) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          g_motor1->halt();
-          #endif
-          break;
+    return false;
+  }
 
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          g_motor2->halt();
-          #endif
-          break;
+  static uint32_t motor_get_target(const motor_t &idx) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      return g_motor1->get_target_position();
+#endif
+      break;
 
-        default: break;
-      }
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      return g_motor2->get_target_position();
+#endif
+      break;
     }
 
-    static uint8_t motor_get_speed(const motor_t& idx) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          return g_motor1->get_speed();
-          #endif
-          break;
+    return 0;
+  }
 
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          return g_motor2->get_speed();
-          #endif
-          break;
-      }
+  static uint32_t motor_get_position(const motor_t &idx) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      return g_motor1->get_current_position();
+#endif
+      break;
 
-      return 0;
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      return g_motor2->get_current_position();
+#endif
+      break;
     }
 
-    static uint8_t motor_get_mode(const motor_t& idx) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          return g_motor1->get_step_mode();
-          #endif
-          break;
+    return 0;
+  }
 
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          return g_motor2->get_step_mode();
-          #endif
-          break;
-      }
+  static void motor_set_speed(const motor_t &idx, const uint32_t &value) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      g_motor1->set_speed(value);
+#endif
+      break;
 
-      return 0;
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      g_motor2->set_speed(value);
+#endif
+      break;
+
+    default:
+      return;
     }
+  }
 
-    static uint8_t motor_is_moving(const motor_t& idx) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          return ((g_motor1->is_moving()) ? 1 : 0);
-          #endif
-          break;
+  static void motor_set_mode_full(const motor_t &idx) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      g_motor1->set_full_step();
+#endif
+      break;
 
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          return ((g_motor2->is_moving()) ? 1 : 0);
-          #endif
-          break;
-      }
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      g_motor2->set_full_step();
+#endif
+      break;
 
-      return false;
+    default:
+      return;
     }
+  }
 
-    static uint32_t motor_get_target(const motor_t& idx) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          return g_motor1->get_target_position();
-          #endif
-          break;
+  static void motor_set_mode_half(const motor_t &idx) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      g_motor1->set_half_step();
+#endif
+      break;
 
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          return g_motor2->get_target_position();
-          #endif
-          break;
-      }
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      g_motor2->set_half_step();
+#endif
+      break;
 
-      return 0;
+    default:
+      return;
     }
+  }
 
-    static uint32_t motor_get_position(const motor_t& idx) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          return g_motor1->get_current_position();
-          #endif
-          break;
+  static void motor_set_target(const motor_t &idx, const uint32_t &value) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      g_motor1->set_target_position(value);
+#endif
+      break;
 
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          return g_motor2->get_current_position();
-          #endif
-          break;
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      g_motor2->set_target_position(value);
+#endif
+      break;
 
-      }
-
-      return 0;
+    default:
+      return;
     }
+  }
 
-    static void motor_set_speed(const motor_t& idx, const uint32_t& value) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          g_motor1->set_speed(value);
-          #endif
-          break;
+  static void motor_set_position(const motor_t &idx, const uint32_t &value) {
+    switch (idx) {
+    case MOTOR_ONE:
+#ifdef MOTOR1_HAS_DRIVER
+      g_motor1->set_current_position(value);
+#endif
+      break;
 
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          g_motor2->set_speed(value);
-          #endif
-          break;
+    case MOTOR_TWO:
+#ifdef MOTOR2_HAS_DRIVER
+      g_motor2->set_current_position(value);
+#endif
+      break;
 
-        default:
-          return;
-      }
+    default:
+      return;
     }
+  }
 
-    static void motor_set_mode_full(const motor_t& idx) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          g_motor1->set_full_step();
-          #endif
-          break;
+#ifdef ENABLE_REMOTE_RESET
+  static void system_reset(const uint32_t &wait) {
+    wdt_disable();
+    _delay_ms(wait);
 
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          g_motor2->set_full_step();
-          #endif
-          break;
-
-        default:
-          return;
-      }
+    wdt_enable(WDTO_1S);
+    while (true) { /* loop */
     }
+  }
+#endif
 
-    static void motor_set_mode_half(const motor_t& idx) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          g_motor1->set_half_step();
-          #endif
-          break;
-
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          g_motor2->set_half_step();
-          #endif
-          break;
-
-        default:
-          return;
-      }
-    }
-
-    static void motor_set_target(const motor_t& idx, const uint32_t& value) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          g_motor1->set_target_position(value);
-          #endif
-          break;
-
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          g_motor2->set_target_position(value);
-          #endif
-          break;
-
-        default:
-          return;
-      }
-    }
-
-    static void motor_set_position(const motor_t& idx, const uint32_t& value) {
-      switch(idx) {
-        case MOTOR_ONE:
-          #ifdef MOTOR1_HAS_DRIVER
-          g_motor1->set_current_position(value);
-          #endif
-          break;
-
-        case MOTOR_TWO:
-          #ifdef MOTOR2_HAS_DRIVER
-          g_motor2->set_current_position(value);
-          #endif
-          break;
-
-        default:
-          return;
-      }
-    }
-
-    #ifdef ENABLE_REMOTE_RESET
-    static void system_reset(const uint32_t& wait) {
-      wdt_disable();
-      _delay_ms(wait);
-
-      wdt_enable(WDTO_1S);
-      while (true) { /* loop */ }
-    }
-    #endif
-
-    #ifdef ENABLE_DTR_RESET
-    static void    set_dtr_reset(const bool& value) { dtr_reset(value);       }
-    static uint8_t get_dtr_reset()                  { return dtr_reset_get(); }
-    #endif
+#ifdef ENABLE_DTR_RESET
+  static void set_dtr_reset(const bool &value) { dtr_reset(value); }
+  static uint8_t get_dtr_reset() { return dtr_reset_get(); }
+#endif
 };
 
 #endif

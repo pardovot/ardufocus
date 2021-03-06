@@ -22,38 +22,36 @@
 
 #include "config.h"
 
-#include <stdint.h>
 #include "lookuptable.h"
 #include "stepper.h"
+#include <stdint.h>
 
-class uln2003: public stepper
-{
-  public:
-    struct pinout_t
-    {
-      pin_t A, B, C, D;
-    };
+class uln2003 : public stepper {
+public:
+  struct pinout_t {
+    pin_t A, B, C, D;
+  };
 
-  protected:
-    const pinout_t m_pinout;
+protected:
+  const pinout_t m_pinout;
 
-    volatile  int8_t m_sequence;
-             uint8_t m_stepping_sz;
-    const    uint8_t *p_stepping_tbl;
+  volatile int8_t m_sequence;
+  uint8_t m_stepping_sz;
+  const uint8_t *p_stepping_tbl;
 
-  private:
-    void speed step();
+private:
+  void speed step();
 
-  public:
-    virtual void init();
-    virtual void halt();
-    virtual void sleep();
-    virtual void set_full_step();
-    virtual void set_half_step();
-    virtual speed bool step_cw();
-    virtual speed bool step_ccw();
+public:
+  virtual void init();
+  virtual void halt();
+  virtual void sleep();
+  virtual void set_full_step();
+  virtual void set_half_step();
+  virtual speed bool step_cw();
+  virtual speed bool step_ccw();
 
-    inline uln2003(pinout_t const& pinout) : m_pinout({ pinout }) { ; }
+  inline uln2003(pinout_t const &pinout) : m_pinout({pinout}) { ; }
 };
 
 #endif

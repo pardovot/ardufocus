@@ -28,13 +28,12 @@
 //                   !! VERY IMPORTANT INFORMATION FOLLOWS !!
 //                   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //
-// The wiring of the focuser has changed since commit [8375767], you should remove
-// any physical connections between the AREF and the 3.3V pin, not doing so may
-// damage your board. For more information read the README.md file or the source
-// code commit history.
+// The wiring of the focuser has changed since commit [8375767], you should
+// remove any physical connections between the AREF and the 3.3V pin, not doing
+// so may damage your board. For more information read the README.md file or the
+// source code commit history.
 //
 // [8375767]: https://bit.ly/2HKUXgV
-
 
 // ----------------------------------------------------------------------------
 // PERSISTENT MEMORY ----------------------------------------------------------
@@ -44,7 +43,6 @@
 // active the focuser will remember between power cycles the exact position
 // where it was.
 #define USE_EEPROM
-
 
 // ----------------------------------------------------------------------------
 // MISCELLANEOUS --------------------------------------------------------------
@@ -95,13 +93,13 @@
 // Driver pin-out definition
 // Define bellow the pin-out for your specific driver.
 #ifdef MOTOR1_USE_ULN2003_DRIVER
-  //                    IN1, IN2, IN3, IN4
-  #define MOTOR1_PINOUT   2,   3,   4,   5
+//                    IN1, IN2, IN3, IN4
+#define MOTOR1_PINOUT 2, 3, 4, 5
 #endif
 
 #ifdef MOTOR1_USE_A4988_DRIVER
-  //                    MS1, MS2, MS3, SLEEP,  STEP, DIR
-  #define MOTOR1_PINOUT  12,  11,  10,     8,     7,   6
+//                    MS1, MS2, MS3, SLEEP,  STEP, DIR
+#define MOTOR1_PINOUT 12, 11, 10, 8, 7, 6
 #endif
 
 // Activate the following directive if you'd like to invert the motor rotation
@@ -121,7 +119,6 @@
 // AF point.
 #define MOTOR1_SLEEP_TIMEOUT 15
 
-
 // ----------------------------------------------------------------------------
 // SPEED PROFILE --------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -137,8 +134,7 @@
 //  - Min speed: 250
 //
 #define MOTOR1_MAX_SPEED 150
-#define MOTOR1_MIN_SPEED  25
-
+#define MOTOR1_MIN_SPEED 25
 
 // ----------------------------------------------------------------------------
 // ACCELERATION PROFILE -------------------------------------------------------
@@ -175,27 +171,28 @@
 // any acceleration control. The default value is 10 steps of left undefined.
 //#define ACCEL_MIN_STEPS 10
 
-
 // ----------------------------------------------------------------------------
 // TEMPERATURE SENSOR ---------------------------------------------------------
 // ----------------------------------------------------------------------------
-#define NTC_ADC_CHANNEL          0
-#define NTC_NOMINAL_TEMP      25.0F
-#define NTC_BCOEFFICIENT    3950.0F
-#define NTC_NOMINAL_VAL    10000.0F
-#define NTC_RESISTOR_VAL   10000.0F
+#define NTC_ADC_CHANNEL 0
+#define NTC_NOMINAL_TEMP 25.0F
+#define NTC_BCOEFFICIENT 3950.0F
+#define NTC_NOMINAL_VAL 10000.0F
+#define NTC_RESISTOR_VAL 10000.0F
 
-#define NTC_MIN_RAW_VALUE  50 // min value to be considered a valid reading (xxxC)
-#define NTC_MAX_RAW_VALUE 950 // max value to be considered a valid reading (-23C)
+#define NTC_MIN_RAW_VALUE                                                      \
+  50 // min value to be considered a valid reading (xxxC)
+#define NTC_MAX_RAW_VALUE                                                      \
+  950 // max value to be considered a valid reading (-23C)
 
 // According to the Moonlite protocol the temperature probe should only be read
 // when the command ":C#" is received but some applications, such as SGP, seems
 // not to respect this and only call the get temperature command ":GT#" which
-// means the temperature will never get updated and the last read value is always
-// returned, either it is valid or not. Enabling the following option will force
-// the temperature gathering process on every temperature read command.
+// means the temperature will never get updated and the last read value is
+// always returned, either it is valid or not. Enabling the following option
+// will force the temperature gathering process on every temperature read
+// command.
 #define START_TEMP_CONVERSION_ON_EVERY_GET
-
 
 // ----------------------------------------------------------------------------
 // USER INTERFACE -------------------------------------------------------------
@@ -214,8 +211,8 @@
 
 // We like the switches to be wired in an active-low configuration, this way you
 // don't need to use additional external resistors, we will automatically enable
-// the internal pull-ups for you. If you decide to use any other wiring logic use
-// the option bellow to reflect it.
+// the internal pull-ups for you. If you decide to use any other wiring logic
+// use the option bellow to reflect it.
 //
 //           ---/.---
 //  GND --- | SWITCH | --- INPUT_PIN
@@ -233,7 +230,6 @@
 // Pin A0 is channel 0 (..) pin A3 is channel 3
 // DO NOT USE CHANNEL 0, valid options are 1, 2 and 3
 #define UI_KAP_ADC_CHANNEL 1
-
 
 // ----------------------------------------------------------------------------
 // DO NOT EDIT ANYTHING BELLOW THIS HEADER ------------------------------------

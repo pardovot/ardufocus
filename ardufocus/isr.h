@@ -22,18 +22,18 @@
 
 #include "config.h"
 
-#include <avr/interrupt.h>
-#include "stepper.h"
-#include "eeprom.h"
 #include "analog.h"
+#include "eeprom.h"
 #include "macro.h"
+#include "stepper.h"
+#include <avr/interrupt.h>
 
 #ifdef MOTOR1_HAS_DRIVER
-extern stepper* g_motor1;
+extern stepper *g_motor1;
 #endif
 
 #ifdef MOTOR2_HAS_DRIVER
-extern stepper* g_motor2;
+extern stepper *g_motor2;
 #endif
 
 #endif

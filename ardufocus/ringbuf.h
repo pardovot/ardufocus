@@ -20,17 +20,16 @@
 #ifndef __RINGBUF_H__
 #define __RINGBUF_H__
 
+#include <avr/interrupt.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <avr/interrupt.h>
 #include <util/atomic.h>
 
 /**
  * @brief   Circular Queue class
  * @details Implementation of the classic ring buffer data structure
  */
-template<typename T, uint8_t N> class Ringbuf
-{
+template <typename T, uint8_t N> class Ringbuf {
 private:
   /**
    * @brief   Buffer structure
@@ -59,13 +58,13 @@ public:
    * @param   item Item to be added to the queue
    * @return  true if the operation was successful
    */
-  bool enqueue(T const &item)
-  {
-    if (full()) return false;
+  bool enqueue(T const &item) {
+    if (full())
+      return false;
 
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
       m_buffer.queue[m_buffer.tail] = item;
-      m_buffer.tail = (m_buffer.tail +1) % N;
+      m_buffer.tail = (m_buffer.tail + 1) % N;
     }
     return true;
   }
@@ -82,7 +81,7 @@ public:
    * @details Returns true if the queue is full, false otherwise.
    * @return  true if queue is full
    */
-  inline bool full() { return (m_buffer.head == (m_buffer.tail +1) % N); }
+  inline bool full() { return (m_buffer.head == (m_buffer.tail + 1) % N); }
 
   /**
    * @brief   Gets the next element from the queue without removing it
@@ -95,12 +94,11 @@ public:
   /**
    * @brief   Reset the queue position
    * @details The head and tail pointer will be reset to the start position thus
-   *          the queue will become empty. Please be aware that the data will not
-   *          be removed from memory.
+   *          the queue will become empty. Please be aware that the data will
+   * not be removed from memory.
    * @return  true if the operation was successful
    */
-  bool reset()
-  {
+  bool reset() {
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
       m_buffer.head = 0;
       m_buffer.tail = 0;
@@ -122,13 +120,13 @@ public:
    *          buffer_t head field. The element is returned to the caller.
    * @return  type T element
    */
-  T dequeue()
-  {
-    if (empty()) return T();
+  T dequeue() {
+    if (empty())
+      return T();
 
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
       const T item = m_buffer.queue[m_buffer.head];
-      m_buffer.head = (m_buffer.head +1) % N;
+      m_buffer.head = (m_buffer.head + 1) % N;
       return item;
     }
 

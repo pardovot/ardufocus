@@ -22,20 +22,20 @@
 
 #include "config.h"
 
-#include "ringbuf.h"
-#include "macro.h"
 #include "hal.h"
+#include "macro.h"
+#include "ringbuf.h"
 
 #define SERIAL_TXBUF_SZ 39u
 #define SERIAL_RXBUF_SZ 78u
 
 namespace usart {
-  struct buffer_t {
-    Ringbuf<char, SERIAL_RXBUF_SZ> rx;
-    Ringbuf<char, SERIAL_TXBUF_SZ> tx;
-  };
+struct buffer_t {
+  Ringbuf<char, SERIAL_RXBUF_SZ> rx;
+  Ringbuf<char, SERIAL_TXBUF_SZ> tx;
+};
 
-  extern buffer_t buffer;
-}
+extern buffer_t buffer;
+} // namespace usart
 
 #endif

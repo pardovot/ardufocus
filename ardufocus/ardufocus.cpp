@@ -22,69 +22,67 @@
 // --------------------------------------------------------------------------
 // Globals ------------------------------------------------------------------
 // --------------------------------------------------------------------------
-eeprom_map_t  g_config;
+eeprom_map_t g_config;
 
 #ifdef MOTOR1_HAS_DRIVER
-  stepper* g_motor1 = &motor1drv;
+stepper *g_motor1 = &motor1drv;
 #endif
 
 #ifdef MOTOR2_HAS_DRIVER
-  stepper* g_motor2 = &motor2drv;
+stepper *g_motor2 = &motor2drv;
 #endif
 
-
-int main(void)
-{
-  // --------------------------------------------------------------------------
-  // DEBUG --------------------------------------------------------------------
-  // --------------------------------------------------------------------------
-  #ifdef DEBUG_ISR
+int main(void) {
+// --------------------------------------------------------------------------
+// DEBUG --------------------------------------------------------------------
+// --------------------------------------------------------------------------
+#ifdef DEBUG_ISR
   DDRB = bit(PB5);
   DDRC = bit(PC3) | bit(PC2);
-  #endif
+#endif
 
   // --------------------------------------------------------------------------
   // EEPROM -------------------------------------------------------------------
   // --------------------------------------------------------------------------
   eeprom_init(&g_config);
 
-
   // --------------------------------------------------------------------------
   // DTR Serial Reset ---------------------------------------------------------
   // --------------------------------------------------------------------------
   dtr_disable();
-
 
   // --------------------------------------------------------------------------
   // Disable Watchdog ---------------------------------------------------------
   // --------------------------------------------------------------------------
   wdt_disable();
 
-
   // --------------------------------------------------------------------------
   // Disable global interrupts ------------------------------------------------
   // --------------------------------------------------------------------------
   cli();
 
+// --------------------------------------------------------------------------
+// Load settings ------------------------------------------------------------
+// --------------------------------------------------------------------------
+#ifdef MOTOR1_HAS_DRIVER
+  g_motor1->set_current_position(g_config.position_m1);
+#endif
 
-  // --------------------------------------------------------------------------
-  // Load settings ------------------------------------------------------------
-  // --------------------------------------------------------------------------
-  #ifdef MOTOR1_HAS_DRIVER
-    g_motor1->set_current_position(g_config.position_m1);
-  #endif
-
-  #ifdef MOTOR2_HAS_DRIVER
-    g_motor2->set_current_position(g_config.position_m2);
-  #endif
-
+#ifdef MOTOR2_HAS_DRIVER
+  g_motor2->set_current_position(g_config.position_m2);
+#endif
 
   // --------------------------------------------------------------------------
   // Timer0 ISR init routine --------------------------------------------------
   // --------------------------------------------------------------------------
   // Cleanup all the relevant registers
-  TCCR0A = 0; TCCR0B = 0; TIMSK0 = 0;
-  TIFR0  = 0; TCNT0  = 0; OCR0A  = 0; OCR0B = 0;
+  TCCR0A = 0;
+  TCCR0B = 0;
+  TIMSK0 = 0;
+  TIFR0 = 0;
+  TCNT0 = 0;
+  OCR0A = 0;
+  OCR0B = 0;
 
   // set waveform generation mode to CTC, top OCR0A
   TCCR0A |= bit(WGM01);
@@ -98,13 +96,17 @@ int main(void)
   // sets the Output Compare Register values
   OCR0A = TIMER0_OCRA;
 
-
   // --------------------------------------------------------------------------
   // Timer2 ISR init routine --------------------------------------------------
   // --------------------------------------------------------------------------
   // Cleanup all the relevant registers
-  TCCR2A = 0; TCCR2B = 0; TIMSK2 = 0;
-  TIFR2  = 0; TCNT2  = 0; OCR2A  = 0; OCR2B = 0;
+  TCCR2A = 0;
+  TCCR2B = 0;
+  TIMSK2 = 0;
+  TIFR2 = 0;
+  TCNT2 = 0;
+  OCR2A = 0;
+  OCR2B = 0;
 
   // set waveform generation mode to CTC, top OCR0A
   TCCR2A |= bit(WGM21);
@@ -118,52 +120,46 @@ int main(void)
   // sets the Output Compare Register values
   OCR2A = TIMER2_OCRA;
 
-
   // --------------------------------------------------------------------------
   // ADC init routine ---------------------------------------------------------
   // --------------------------------------------------------------------------
   Analog::setup();
-
 
   // --------------------------------------------------------------------------
   // User interface -----------------------------------------------------------
   // --------------------------------------------------------------------------
   UI::setup();
 
+// --------------------------------------------------------------------------
+// Motor #1 init routine ----------------------------------------------------
+// --------------------------------------------------------------------------
+#ifdef MOTOR1_HAS_DRIVER
+  g_motor1->set_invert_direction(MOTOR1_INVERT_DIRECTION);
+  g_motor1->set_sleep_when_idle(MOTOR1_SLEEP_WHEN_IDLE);
+  g_motor1->set_sleep_timeout(MOTOR1_SLEEP_TIMEOUT);
+  g_motor1->set_max_speed(MOTOR1_MAX_SPEED);
+  g_motor1->set_min_speed(MOTOR1_MIN_SPEED);
+  g_motor1->init();
+#endif
 
-  // --------------------------------------------------------------------------
-  // Motor #1 init routine ----------------------------------------------------
-  // --------------------------------------------------------------------------
-  #ifdef MOTOR1_HAS_DRIVER
-    g_motor1->set_invert_direction(MOTOR1_INVERT_DIRECTION);
-    g_motor1->set_sleep_when_idle(MOTOR1_SLEEP_WHEN_IDLE);
-    g_motor1->set_sleep_timeout(MOTOR1_SLEEP_TIMEOUT);
-    g_motor1->set_max_speed(MOTOR1_MAX_SPEED);
-    g_motor1->set_min_speed(MOTOR1_MIN_SPEED);
-    g_motor1->init();
-  #endif
-
-  #ifdef MOTOR2_HAS_DRIVER
-    g_motor2->set_invert_direction(MOTOR2_INVERT_DIRECTION);
-    g_motor2->set_sleep_when_idle(MOTOR2_SLEEP_WHEN_IDLE);
-    g_motor2->set_sleep_timeout(MOTOR2_SLEEP_TIMEOUT);
-    g_motor2->set_max_speed(MOTOR2_MAX_SPEED);
-    g_motor2->set_min_speed(MOTOR2_MIN_SPEED);
-    g_motor2->init();
-  #endif
-
+#ifdef MOTOR2_HAS_DRIVER
+  g_motor2->set_invert_direction(MOTOR2_INVERT_DIRECTION);
+  g_motor2->set_sleep_when_idle(MOTOR2_SLEEP_WHEN_IDLE);
+  g_motor2->set_sleep_timeout(MOTOR2_SLEEP_TIMEOUT);
+  g_motor2->set_max_speed(MOTOR2_MAX_SPEED);
+  g_motor2->set_min_speed(MOTOR2_MIN_SPEED);
+  g_motor2->init();
+#endif
 
   // --------------------------------------------------------------------------
   // Enable global interrupts -------------------------------------------------
   // --------------------------------------------------------------------------
   sei();
 
-
   // --------------------------------------------------------------------------
   // Loop routine -------------------------------------------------------------
   // --------------------------------------------------------------------------
-  for(;;)
-  {
+  for (;;) {
     comms.receive();
 
     UI::update_display();

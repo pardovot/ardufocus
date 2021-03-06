@@ -23,60 +23,61 @@
 #define LOW 0
 #define HIGH 255
 
-#include <util/atomic.h>
-#include <avr/pgmspace.h>
 #include "hal.h"
+#include <avr/pgmspace.h>
+#include <util/atomic.h>
 
 typedef uint8_t pin_t;
 
-class IO
-{
+class IO {
   /**
    * Disable the creation of an instance of this object.
    * This class should be used as a static class.
    */
-  private:
-     IO() {;}
-    ~IO() {;}
+private:
+  IO() { ; }
+  ~IO() { ; }
 
-  public:
-    static inline void set_as_input(const uint8_t &pin) {
-      const uint8_t     mask = hal_tbl_lookup(pin, IO_BIT);
-      volatile uint8_t *mode = (volatile uint8_t *)(hal_tbl_lookup(pin, IO_DIR));
-      volatile uint8_t *port = (volatile uint8_t *)(hal_tbl_lookup(pin, IO_DATA));
+public:
+  static inline void set_as_input(const uint8_t &pin) {
+    const uint8_t mask = hal_tbl_lookup(pin, IO_BIT);
+    volatile uint8_t *mode = (volatile uint8_t *)(hal_tbl_lookup(pin, IO_DIR));
+    volatile uint8_t *port = (volatile uint8_t *)(hal_tbl_lookup(pin, IO_DATA));
 
-      ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        *mode &= ~mask;
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+      *mode &= ~mask;
+      *port &= ~mask;
+    }
+  }
+
+  static inline void set_as_output(const uint8_t &pin) {
+    const uint8_t mask = hal_tbl_lookup(pin, IO_BIT);
+    volatile uint8_t *mode = (volatile uint8_t *)(hal_tbl_lookup(pin, IO_DIR));
+
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { *mode |= mask; }
+  }
+
+  static inline void write(const uint8_t &pin, const uint8_t &value) {
+    const uint8_t mask = hal_tbl_lookup(pin, IO_BIT);
+    volatile uint8_t *port = (volatile uint8_t *)(hal_tbl_lookup(pin, IO_DATA));
+
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+      if (value == LOW) {
         *port &= ~mask;
+      } else {
+        *port |= mask;
       }
     }
+  }
 
-    static inline void set_as_output(const uint8_t &pin) {
-      const uint8_t     mask = hal_tbl_lookup(pin, IO_BIT);
-      volatile uint8_t *mode = (volatile uint8_t *)(hal_tbl_lookup(pin, IO_DIR));
+  static inline uint8_t read(const uint8_t &pin) {
+    const uint8_t mask = hal_tbl_lookup(pin, IO_BIT);
+    volatile uint8_t *port = (volatile uint8_t *)(hal_tbl_lookup(pin, IO_IN));
 
-      ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        *mode |= mask;
-      }
-    }
-
-    static inline void write(const uint8_t &pin, const uint8_t &value) {
-      const uint8_t     mask = hal_tbl_lookup(pin, IO_BIT);
-      volatile uint8_t *port = (volatile uint8_t *)(hal_tbl_lookup(pin, IO_DATA));
-
-      ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        if(value == LOW) { *port &= ~mask; }
-        else { *port |= mask; }
-      }
-    }
-
-    static inline uint8_t read(const uint8_t &pin) {
-        const uint8_t     mask  = hal_tbl_lookup(pin, IO_BIT);
-        volatile uint8_t *port  = (volatile uint8_t *)(hal_tbl_lookup(pin, IO_IN));
-
-        if (*port & mask) return HIGH;
-        return LOW;
-    }
+    if (*port & mask)
+      return HIGH;
+    return LOW;
+  }
 };
 
 #endif

@@ -22,7 +22,7 @@
 
 // Program version and release
 #define ARDUFOCUS_VERSION "0.2a"
-#define ARDUFOCUS_BRANCH  "master"
-#define ARDUFOCUS_URL     "https://github.com/jbrazio/ardufocus"
+#define ARDUFOCUS_BRANCH "master"
+#define ARDUFOCUS_URL "https://github.com/jbrazio/ardufocus"
 
 #endif

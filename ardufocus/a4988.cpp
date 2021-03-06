@@ -24,8 +24,7 @@
  * @details [long description]
  *
  */
-void a4988::init()
-{
+void a4988::init() {
   stepper::init();
 
   IO::set_as_output(m_pinout.ms1);
@@ -35,24 +34,22 @@ void a4988::init()
   IO::set_as_output(m_pinout.sleep);
   IO::set_as_output(m_pinout.direction);
 
-  IO::write(m_pinout.ms1,        LOW);
-  IO::write(m_pinout.ms2,        LOW);
-  IO::write(m_pinout.ms3,        LOW);
-  IO::write(m_pinout.step,       LOW);
-  IO::write(m_pinout.direction,  LOW);
+  IO::write(m_pinout.ms1, LOW);
+  IO::write(m_pinout.ms2, LOW);
+  IO::write(m_pinout.ms3, LOW);
+  IO::write(m_pinout.step, LOW);
+  IO::write(m_pinout.direction, LOW);
 
   // active low logic
   IO::write(m_pinout.sleep, (m_sleep_when_idle) ? LOW : HIGH);
 }
-
 
 /**
  * @brief [brief description]
  * @details [long description]
  *
  */
-void a4988::halt()
-{
+void a4988::halt() {
 
   stepper::halt();
   m_sleep_timeout_cnt = ((m_sleep_timeout * 1000000UL) / TIMER0_TICK);
@@ -62,14 +59,12 @@ void a4988::halt()
   util::delay_2us();
 }
 
-
 /**
  * @brief [brief description]
  * @details [long description]
  *
  */
-void a4988::set_full_step()
-{
+void a4988::set_full_step() {
   m_mode = 0x00;
   IO::write(m_pinout.ms1, LOW);
   IO::write(m_pinout.ms2, LOW);
@@ -79,14 +74,12 @@ void a4988::set_full_step()
   util::delay_2us();
 }
 
-
 /**
  * @brief [brief description]
  * @details [long description]
  *
  */
-void a4988::set_half_step()
-{
+void a4988::set_half_step() {
   m_mode = 0xFF;
   IO::write(m_pinout.ms1, HIGH);
   IO::write(m_pinout.ms2, LOW);
@@ -96,61 +89,51 @@ void a4988::set_half_step()
   util::delay_2us();
 }
 
-
 /**
  * @brief [brief description]
  * @details [long description]
  *
  */
-bool a4988::step_cw()
-{
-  switch(IO::read(m_pinout.direction))
-  {
-    case LOW:
-      IO::write(m_pinout.direction, HIGH);
-      // A4988: 400ns, A8825: 1.3us
-      util::delay_2us();
+bool a4988::step_cw() {
+  switch (IO::read(m_pinout.direction)) {
+  case LOW:
+    IO::write(m_pinout.direction, HIGH);
+    // A4988: 400ns, A8825: 1.3us
+    util::delay_2us();
 
-    case HIGH:
-      ;
+  case HIGH:;
 
-    default:
-      return step();
+  default:
+    return step();
   }
 }
 
-
 /**
  * @brief [brief description]
  * @details [long description]
  *
  */
-bool a4988::step_ccw()
-{
-  switch(IO::read(m_pinout.direction))
-  {
-    case LOW:
-      ;
+bool a4988::step_ccw() {
+  switch (IO::read(m_pinout.direction)) {
+  case LOW:;
 
-    case HIGH:
-      IO::write(m_pinout.direction, LOW);
-      // A4988: 400ns, A8825: 1.3us
-      util::delay_2us();
+  case HIGH:
+    IO::write(m_pinout.direction, LOW);
+    // A4988: 400ns, A8825: 1.3us
+    util::delay_2us();
 
-    default:
-      return step();
+  default:
+    return step();
   }
 }
 
-
 /**
  * @brief [brief description]
  * @details [long description]
  *
  */
-bool a4988::step()
-{
-  if(m_sleep_when_idle && !IO::read(m_pinout.sleep)) {
+bool a4988::step() {
+  if (m_sleep_when_idle && !IO::read(m_pinout.sleep)) {
     IO::write(m_pinout.sleep, HIGH);
     // A4988: 200ns, A8825: 1.7ms
     util::delay_2ms();
@@ -174,18 +157,16 @@ bool a4988::step()
   return true;
 }
 
-
 /**
  * @brief [brief description]
  * @details [long description]
  *
  */
-void a4988::sleep()
-{
-  if(m_sleep_when_idle && m_sleep_timeout_cnt) {
+void a4988::sleep() {
+  if (m_sleep_when_idle && m_sleep_timeout_cnt) {
     --m_sleep_timeout_cnt;
 
-    if(!m_sleep_timeout_cnt) {
+    if (!m_sleep_timeout_cnt) {
       IO::write(m_pinout.sleep, LOW);
     }
   }

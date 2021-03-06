@@ -23,29 +23,23 @@
 #include "config.h"
 
 #ifdef USE_UI_KAP
-  #include "ui_keybd.h"
+#include "ui_keybd.h"
 #endif
 
-namespace UI
-{
-  inline void setup()
-  {
-    #ifdef USE_UI_KAP
-      Keybd::setup();
-    #endif
-  }
-
-  inline void update_display()
-  {
-    ;
-  }
-
-  inline void fetch_key_state()
-  {
-    #ifdef USE_UI_KAP
-      Keybd::tick();
-    #endif
-  }
+namespace UI {
+inline void setup() {
+#ifdef USE_UI_KAP
+  Keybd::setup();
+#endif
 }
+
+inline void update_display() { ; }
+
+inline void fetch_key_state() {
+#ifdef USE_UI_KAP
+  Keybd::tick();
+#endif
+}
+} // namespace UI
 
 #endif

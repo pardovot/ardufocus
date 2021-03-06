@@ -27,17 +27,17 @@
 #define bit(b) (1UL << (b))
 
 #undef constrain
-#define constrain(n, l, h) ((n)<(l)?(l):((n)>(h)?(h):(n)))
+#define constrain(n, l, h) ((n) < (l) ? (l) : ((n) > (h) ? (h) : (n)))
 
 #undef map
-#define map(n, a, b, x, y) ((n-a)*(y-x)/(b-a)+x)
+#define map(n, a, b, x, y) ((n - a) * (y - x) / (b - a) + x)
 
 #undef asizeof
 #define asizeof(a) (sizeof(a) / sizeof(*a))
 
 #define force_inline __attribute__((always_inline)) inline
-#define silence      __attribute__((unused))
-#define speed        __attribute__((optimize("O3")))
-#define diet         __attribute__((optimize("Os")))
+#define silence __attribute__((unused))
+#define speed __attribute__((optimize("O3")))
+#define diet __attribute__((optimize("Os")))
 
 #endif
