@@ -20,28 +20,28 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-// ----------------------------------------------------------------------------
-// SAFETY NOTICE --------------------------------------------------------------
-// ----------------------------------------------------------------------------
-//
-//                   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//                   !! VERY IMPORTANT INFORMATION FOLLOWS !!
-//                   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// The wiring of the focuser has changed since commit [8375767], you should
-// remove any physical connections between the AREF and the 3.3V pin, not doing
-// so may damage your board. For more information read the README.md file or the
-// source code commit history.
-//
-// [8375767]: https://bit.ly/2HKUXgV
+ // ----------------------------------------------------------------------------
+ // SAFETY NOTICE --------------------------------------------------------------
+ // ----------------------------------------------------------------------------
+ //
+ //                   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //                   !! VERY IMPORTANT INFORMATION FOLLOWS !!
+ //                   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //
+ // The wiring of the focuser has changed since commit [8375767], you should
+ // remove any physical connections between the AREF and the 3.3V pin, not doing
+ // so may damage your board. For more information read the README.md file or the
+ // source code commit history.
+ //
+ // [8375767]: https://bit.ly/2HKUXgV
 
-// ----------------------------------------------------------------------------
-// PERSISTENT MEMORY ----------------------------------------------------------
-// ----------------------------------------------------------------------------
-//
-// Enable auto save of the focuser position uppon finishing each move. When
-// active the focuser will remember between power cycles the exact position
-// where it was.
+ // ----------------------------------------------------------------------------
+ // PERSISTENT MEMORY ----------------------------------------------------------
+ // ----------------------------------------------------------------------------
+ //
+ // Enable auto save of the focuser position uppon finishing each move. When
+ // active the focuser will remember between power cycles the exact position
+ // where it was.
 #define USE_EEPROM
 
 // ----------------------------------------------------------------------------

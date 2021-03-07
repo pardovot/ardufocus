@@ -22,20 +22,20 @@
 usart::buffer_t usart::buffer;
 
 ISR(USART_RX_VECT) {
-  // read a byte from the incoming stream
-  // check for parity error and buffer it
-  if (bit_is_clear(USART_CSRA, USART_BIT_PE)) {
-    usart::buffer.rx.enqueue(USART_DR);
-  }
+	// read a byte from the incoming stream
+	// check for parity error and buffer it
+	if (bit_is_clear(USART_CSRA, USART_BIT_PE)) {
+		usart::buffer.rx.enqueue(USART_DR);
+	}
 }
 
 ISR(USART_TX_VECT) {
-  // transmit a byte from the buffer
-  // disable USART TX ISR when buffer is empty
-  if (!usart::buffer.tx.empty()) {
-    USART_DR = usart::buffer.tx.dequeue();
-    USART_CSRA |= bit(USART_BIT_TXC);
-  } else {
-    USART_CSRB &= ~bit(USART_BIT_DRIE);
-  }
+	// transmit a byte from the buffer
+	// disable USART TX ISR when buffer is empty
+	if (!usart::buffer.tx.empty()) {
+		USART_DR = usart::buffer.tx.dequeue();
+		USART_CSRA |= bit(USART_BIT_TXC);
+	} else {
+		USART_CSRB &= ~bit(USART_BIT_DRIE);
+	}
 }

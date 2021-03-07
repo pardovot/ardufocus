@@ -19,23 +19,23 @@
 
 #include "uln2003.h"
 
-// FIXME TODO
-// When this clas is active the linker was screaming:
-// undefined reference to `__cxa_pure_virtual'
+ // FIXME TODO
+ // When this clas is active the linker was screaming:
+ // undefined reference to `__cxa_pure_virtual'
 
 extern "C" void __cxa_pure_virtual(void) __attribute__((__noreturn__));
 extern "C" void __cxa_deleted_virtual(void) __attribute__((__noreturn__));
 
 void __cxa_pure_virtual(void) {
-  // We might want to write some diagnostics to uart in this case
-  // std::terminate();
-  abort();
+	// We might want to write some diagnostics to uart in this case
+	// std::terminate();
+	abort();
 }
 
 void __cxa_deleted_virtual(void) {
-  // We might want to write some diagnostics to uart in this case
-  // std::terminate();
-  abort();
+	// We might want to write some diagnostics to uart in this case
+	// std::terminate();
+	abort();
 }
 
 // EOF
@@ -46,20 +46,20 @@ void __cxa_deleted_virtual(void) {
  *
  */
 void uln2003::init() {
-  stepper::init();
+	stepper::init();
 
-  m_sequence = 0;
-  set_full_step();
+	m_sequence = 0;
+	set_full_step();
 
-  IO::set_as_output(m_pinout.A);
-  IO::set_as_output(m_pinout.B);
-  IO::set_as_output(m_pinout.C);
-  IO::set_as_output(m_pinout.D);
+	IO::set_as_output(m_pinout.A);
+	IO::set_as_output(m_pinout.B);
+	IO::set_as_output(m_pinout.C);
+	IO::set_as_output(m_pinout.D);
 
-  IO::write(m_pinout.A, LOW);
-  IO::write(m_pinout.B, LOW);
-  IO::write(m_pinout.C, LOW);
-  IO::write(m_pinout.D, LOW);
+	IO::write(m_pinout.A, LOW);
+	IO::write(m_pinout.B, LOW);
+	IO::write(m_pinout.C, LOW);
+	IO::write(m_pinout.D, LOW);
 }
 
 /**
@@ -68,8 +68,8 @@ void uln2003::init() {
  *
  */
 void uln2003::halt() {
-  stepper::halt();
-  m_sleep_timeout_cnt = ((m_sleep_timeout * 1000000UL) / TIMER0_TICK);
+	stepper::halt();
+	m_sleep_timeout_cnt = ((m_sleep_timeout * 1000000UL) / TIMER0_TICK);
 }
 
 /**
@@ -78,9 +78,9 @@ void uln2003::halt() {
  *
  */
 void uln2003::set_full_step() {
-  m_mode = 0x00;
-  m_stepping_sz = lookup::uln2003_unipolar_full_sz;
-  p_stepping_tbl = lookup::uln2003_unipolar_full;
+	m_mode = 0x00;
+	m_stepping_sz = lookup::uln2003_unipolar_full_sz;
+	p_stepping_tbl = lookup::uln2003_unipolar_full;
 }
 
 /**
@@ -89,9 +89,9 @@ void uln2003::set_full_step() {
  *
  */
 void uln2003::set_half_step() {
-  m_mode = 0xFF;
-  m_stepping_sz = lookup::uln2003_unipolar_half_sz;
-  p_stepping_tbl = lookup::uln2003_unipolar_half;
+	m_mode = 0xFF;
+	m_stepping_sz = lookup::uln2003_unipolar_half_sz;
+	p_stepping_tbl = lookup::uln2003_unipolar_half;
 }
 
 /**
@@ -100,12 +100,12 @@ void uln2003::set_half_step() {
  *
  */
 bool uln2003::step_cw() {
-  step();
-  --m_sequence;
-  if (m_sequence < 0) {
-    m_sequence = (m_stepping_sz - 1);
-  }
-  return true;
+	step();
+	--m_sequence;
+	if (m_sequence < 0) {
+		m_sequence = (m_stepping_sz - 1);
+	}
+	return true;
 }
 
 /**
@@ -114,12 +114,12 @@ bool uln2003::step_cw() {
  *
  */
 bool uln2003::step_ccw() {
-  step();
-  ++m_sequence;
-  if (m_sequence > (int8_t)(m_stepping_sz - 1)) {
-    m_sequence = 0;
-  }
-  return true;
+	step();
+	++m_sequence;
+	if (m_sequence > (int8_t)(m_stepping_sz - 1)) {
+		m_sequence = 0;
+	}
+	return true;
 }
 
 /**
@@ -128,14 +128,14 @@ bool uln2003::step_ccw() {
  *
  */
 void uln2003::step() {
-  const uint8_t byte = pgm_read_byte(&(*(p_stepping_tbl + m_sequence)));
+	const uint8_t byte = pgm_read_byte(&(*(p_stepping_tbl + m_sequence)));
 
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-    IO::write(m_pinout.A, ((byte >> 3) & 0x1) ? HIGH : LOW);
-    IO::write(m_pinout.B, ((byte >> 2) & 0x1) ? HIGH : LOW);
-    IO::write(m_pinout.C, ((byte >> 1) & 0x1) ? HIGH : LOW);
-    IO::write(m_pinout.D, ((byte)&0x1) ? HIGH : LOW);
-  }
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+		IO::write(m_pinout.A, ((byte >> 3) & 0x1) ? HIGH : LOW);
+		IO::write(m_pinout.B, ((byte >> 2) & 0x1) ? HIGH : LOW);
+		IO::write(m_pinout.C, ((byte >> 1) & 0x1) ? HIGH : LOW);
+		IO::write(m_pinout.D, ((byte) & 0x1) ? HIGH : LOW);
+	}
 }
 
 /**
@@ -144,16 +144,16 @@ void uln2003::step() {
  *
  */
 void uln2003::sleep() {
-  if (m_sleep_when_idle && m_sleep_timeout_cnt) {
-    --m_sleep_timeout_cnt;
+	if (m_sleep_when_idle && m_sleep_timeout_cnt) {
+		--m_sleep_timeout_cnt;
 
-    if (!m_sleep_timeout_cnt) {
-      ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-        IO::write(m_pinout.A, LOW);
-        IO::write(m_pinout.B, LOW);
-        IO::write(m_pinout.C, LOW);
-        IO::write(m_pinout.D, LOW);
-      }
-    }
-  }
+		if (!m_sleep_timeout_cnt) {
+			ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+				IO::write(m_pinout.A, LOW);
+				IO::write(m_pinout.B, LOW);
+				IO::write(m_pinout.C, LOW);
+				IO::write(m_pinout.D, LOW);
+			}
+		}
+	}
 }

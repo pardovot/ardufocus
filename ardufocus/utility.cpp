@@ -19,25 +19,25 @@
 
 #include "utility.h"
 
-/**
- * @brief [brief description]
- * @details [long description]
- *
- */
-float util::steinhart(const uint16_t &raw) {
-  if (raw < NTC_MIN_RAW_VALUE || raw > NTC_MAX_RAW_VALUE) {
-    return -13.37F;
-  }
+ /**
+  * @brief [brief description]
+  * @details [long description]
+  *
+  */
+float util::steinhart(const uint16_t& raw) {
+	if (raw < NTC_MIN_RAW_VALUE || raw > NTC_MAX_RAW_VALUE) {
+		return -13.37F;
+	}
 
-  float steinhart = constrain(raw, 1, 1022);
-  steinhart =
-      NTC_RESISTOR_VAL / (1023.0F / steinhart - 1.0F); // convert raw to ohms
-  steinhart = log(steinhart / NTC_NOMINAL_VAL);        // ln(R/Ro)
-  steinhart /= NTC_BCOEFFICIENT;                       // 1/B * ln(R/Ro)
-  steinhart += 1.0F / (NTC_NOMINAL_TEMP + 273.15F);    // + (1/To)
-  steinhart = 1.0F / steinhart;                        // invert
-  steinhart -= 273.15F;                                // convert to K to C
-  return steinhart;
+	float steinhart = constrain(raw, 1, 1022);
+	steinhart =
+		NTC_RESISTOR_VAL / (1023.0F / steinhart - 1.0F); // convert raw to ohms
+	steinhart = log(steinhart / NTC_NOMINAL_VAL);        // ln(R/Ro)
+	steinhart /= NTC_BCOEFFICIENT;                       // 1/B * ln(R/Ro)
+	steinhart += 1.0F / (NTC_NOMINAL_TEMP + 273.15F);    // + (1/To)
+	steinhart = 1.0F / steinhart;                        // invert
+	steinhart -= 273.15F;                                // convert to K to C
+	return steinhart;
 }
 
 #ifdef HAS_ACCELERATION
@@ -48,8 +48,8 @@ float util::steinhart(const uint16_t &raw) {
  *          each pair of data points. [https://bit.ly/2JP5SIh]
  *
  */
-float util::lerp(float const &edge0, float const &edge1, float x) {
-  return (1.0 - x) * edge0 + x * edge1;
+float util::lerp(float const& edge0, float const& edge1, float x) {
+	return (1.0 - x) * edge0 + x * edge1;
 }
 
 /**
@@ -57,12 +57,12 @@ float util::lerp(float const &edge0, float const &edge1, float x) {
  * @details [long description]
  *
  */
-float util::clamp(float x, float const &lowerlimit, float const &upperlimit) {
-  if (x < lowerlimit)
-    x = lowerlimit;
-  else if (x > upperlimit)
-    x = upperlimit;
-  return x;
+float util::clamp(float x, float const& lowerlimit, float const& upperlimit) {
+	if (x < lowerlimit)
+		x = lowerlimit;
+	else if (x > upperlimit)
+		x = upperlimit;
+	return x;
 }
 
 #ifdef USE_SMOOTHSTEP_ACCEL
@@ -71,11 +71,11 @@ float util::clamp(float x, float const &lowerlimit, float const &upperlimit) {
  * @details 3rd-order equation [https://bit.ly/2la5Ek0]
  *
  */
-float util::smoothstep(float const &edge0, float const &edge1, float x) {
-  // Scale, and clamp x to 0..1 range
-  x = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
-  // Evaluate polynomial
-  return x * x * (3.0 - 2.0 * x);
+float util::smoothstep(float const& edge0, float const& edge1, float x) {
+	// Scale, and clamp x to 0..1 range
+	x = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+	// Evaluate polynomial
+	return x * x * (3.0 - 2.0 * x);
 }
 
 /**
@@ -83,11 +83,11 @@ float util::smoothstep(float const &edge0, float const &edge1, float x) {
  * @details 5th-order equation [https://bit.ly/2JUMe0I]
  *
  */
-float util::smootherstep(float const &edge0, float const &edge1, float x) {
-  // Scale, and clamp x to 0..1 range
-  x = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
-  // Evaluate polynomial
-  return x * x * x * (x * (x * 6.0 - 15.0) + 10.0);
+float util::smootherstep(float const& edge0, float const& edge1, float x) {
+	// Scale, and clamp x to 0..1 range
+	x = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+	// Evaluate polynomial
+	return x * x * x * (x * (x * 6.0 - 15.0) + 10.0);
 }
 
 /**
@@ -95,11 +95,11 @@ float util::smootherstep(float const &edge0, float const &edge1, float x) {
  * @details 7th-order equation [https://bit.ly/2MtinL2]
  *
  */
-float util::smootheststep(float const &edge0, float const &edge1, float x) {
-  // Scale, and clamp x to 0..1 range
-  x = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
-  // Evaluate polynomial
-  return x * x * x * x * (x * (x * (-x * 20.0 + 70.0) - 84.0) + 35.0);
+float util::smootheststep(float const& edge0, float const& edge1, float x) {
+	// Scale, and clamp x to 0..1 range
+	x = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+	// Evaluate polynomial
+	return x * x * x * x * (x * (x * (-x * 20.0 + 70.0) - 84.0) + 35.0);
 }
 #endif
 #endif

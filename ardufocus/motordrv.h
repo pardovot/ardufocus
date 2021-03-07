@@ -32,15 +32,15 @@
 #endif
 
 #if defined(MOTOR1_USE_A4988_DRIVER)
-a4988 motor1drv({MOTOR1_PINOUT});
+a4988 motor1drv({ MOTOR1_PINOUT });
 #elif defined(MOTOR1_USE_ULN2003_DRIVER)
-uln2003 motor1drv({MOTOR1_PINOUT});
+uln2003 motor1drv({ MOTOR1_PINOUT });
 #endif
 
 #if defined(MOTOR2_USE_A4988_DRIVER)
-a4988 motor2drv({MOTOR2_PINOUT});
+a4988 motor2drv({ MOTOR2_PINOUT });
 #elif defined(MOTOR2_USE_ULN2003_DRIVER)
-uln2003 motor2drv({MOTOR2_PINOUT});
+uln2003 motor2drv({ MOTOR2_PINOUT });
 #endif
 
 #endif

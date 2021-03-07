@@ -34,161 +34,161 @@
 
 class moonlite : protected protocol, protected serial {
 public:
-  moonlite() { setup(); }
+	moonlite() { setup(); }
 
-  void setup() {
-    serial::setup();
+	void setup() {
+		serial::setup();
 
-    serial::write_P(
-        PSTR("Ardufocus " ARDUFOCUS_VERSION "-" ARDUFOCUS_BRANCH " ready.\n"));
-    serial::write_P(PSTR("Visit " ARDUFOCUS_URL " for updates.\n\n"));
-  }
+		serial::write_P(
+			PSTR("Ardufocus " ARDUFOCUS_VERSION "-" ARDUFOCUS_BRANCH " ready.\n"));
+		serial::write_P(PSTR("Visit " ARDUFOCUS_URL " for updates.\n\n"));
+	}
 
-  void receive() {
-    char str[CMD_MAX_LEN];
-    if (serial::receive(str)) {
-      parse(str);
-    }
-  }
+	void receive() {
+		char str[CMD_MAX_LEN];
+		if (serial::receive(str)) {
+			parse(str);
+		}
+	}
 
-  void reply(const char *str) {
-    serial::write(str);
-    serial::write(CMD_END_CHAR);
-  }
+	void reply(const char* str) {
+		serial::write(str);
+		serial::write(CMD_END_CHAR);
+	}
 
-  void reply_P(const char *str) {
-    serial::write_P(str);
-    serial::write(CMD_END_CHAR);
-  }
+	void reply_P(const char* str) {
+		serial::write_P(str);
+		serial::write(CMD_END_CHAR);
+	}
 
-  void parse(char *const str) {
-    size_t offset = 0;
-    motor_t motor = MOTOR_ONE;
-    char buffer[CMD_MAX_LEN] = {0};
+	void parse(char* const str) {
+		size_t offset = 0;
+		motor_t motor = MOTOR_ONE;
+		char buffer[CMD_MAX_LEN] = { 0 };
 
-    if (str[0] == '2') {
-      offset = 1;
-      motor = MOTOR_TWO;
-    }
+		if (str[0] == '2') {
+			offset = 1;
+			motor = MOTOR_TWO;
+		}
 
-    switch (str[0 + offset]) {
-    case 'C':
-      update_temperature();
-      break;
+		switch (str[0 + offset]) {
+			case 'C':
+				update_temperature();
+				break;
 
 #ifdef ENABLE_REMOTE_RESET
-    case 'Z':
-      system_reset(0);
-      break;
+			case 'Z':
+				system_reset(0);
+				break;
 #endif
 
-    case 'F':
-      switch (str[1] + offset) {
-      case 'G':
-        motor_start(motor);
-        break;
+			case 'F':
+				switch (str[1] + offset) {
+					case 'G':
+						motor_start(motor);
+						break;
 
-      case 'Q':
-        motor_stop(motor);
-        break;
-      }
-      break;
+					case 'Q':
+						motor_stop(motor);
+						break;
+				}
+				break;
 
-    case 'G':
-      switch (str[1 + offset]) {
-      case 'D':
-        sprintf_P(buffer, PSTR("%02X"), motor_get_speed(motor));
-        break;
+			case 'G':
+				switch (str[1 + offset]) {
+					case 'D':
+						sprintf_P(buffer, PSTR("%02X"), motor_get_speed(motor));
+						break;
 
-      case 'H':
-        sprintf_P(buffer, PSTR("%02X"), motor_get_mode(motor));
-        break;
+					case 'H':
+						sprintf_P(buffer, PSTR("%02X"), motor_get_mode(motor));
+						break;
 
-      case 'I':
-        sprintf_P(buffer, PSTR("%02X"), motor_is_moving(motor));
-        break;
+					case 'I':
+						sprintf_P(buffer, PSTR("%02X"), motor_is_moving(motor));
+						break;
 
-      case 'N':
+					case 'N':
 #ifdef HIGH_RESOLUTION_MODE
-        sprintf_P(buffer, PSTR("%08lX"), motor_get_target(motor));
+						sprintf_P(buffer, PSTR("%08lX"), motor_get_target(motor));
 #else
-        sprintf_P(buffer, PSTR("%04X"), motor_get_target(motor));
+						sprintf_P(buffer, PSTR("%04X"), motor_get_target(motor));
 #endif
-        break;
+						break;
 
-      case 'P':
+					case 'P':
 #ifdef HIGH_RESOLUTION_MODE
-        sprintf_P(buffer, PSTR("%08lX"), motor_get_position(motor));
+						sprintf_P(buffer, PSTR("%08lX"), motor_get_position(motor));
 #else
-        sprintf_P(buffer, PSTR("%04X"), motor_get_position(motor));
+						sprintf_P(buffer, PSTR("%04X"), motor_get_position(motor));
 #endif
-        break;
+						break;
 
-      case 'T':
+					case 'T':
 #ifdef HIGH_RESOLUTION_MODE
-        sprintf_P(buffer, PSTR("%08lX"), get_temperature());
+						sprintf_P(buffer, PSTR("%08lX"), get_temperature());
 #else
-        sprintf_P(buffer, PSTR("%04X"), ((int16_t)get_temperature()) << 1);
+						sprintf_P(buffer, PSTR("%04X"), ((int16_t)get_temperature()) << 1);
 #endif
-        break;
+						break;
 
 #ifdef ENABLE_DTR_RESET
-      case 'Y':
-        sprintf_P(buffer, PSTR("%02X"), get_dtr_reset());
-        break;
+					case 'Y':
+						sprintf_P(buffer, PSTR("%02X"), get_dtr_reset());
+						break;
 #endif
 
-      default:
-        reply_P(PSTR("00"));
-      }
+					default:
+						reply_P(PSTR("00"));
+				}
 
-      reply(buffer);
-      break;
+				reply(buffer);
+				break;
 
-    case 'S':
-      strncpy(buffer, str + 2 + offset, strlen(str) - (2 + offset));
+			case 'S':
+				strncpy(buffer, str + 2 + offset, strlen(str) - (2 + offset));
 
-      switch (str[1 + offset]) {
-      case 'D':
-        motor_set_speed(motor, util::hex2l(buffer));
-        break;
+				switch (str[1 + offset]) {
+					case 'D':
+						motor_set_speed(motor, util::hex2l(buffer));
+						break;
 
-      case 'F':
-        motor_set_mode_full(motor);
-        break;
+					case 'F':
+						motor_set_mode_full(motor);
+						break;
 
-      case 'H':
-        motor_set_mode_half(motor);
-        break;
+					case 'H':
+						motor_set_mode_half(motor);
+						break;
 
-      case 'N':
+					case 'N':
 #ifdef HIGH_RESOLUTION_MODE
-        motor_set_target(motor, util::hex2ul(buffer));
+						motor_set_target(motor, util::hex2ul(buffer));
 #else
-        motor_set_target(motor, (uint32_t)util::hex2l(buffer));
+						motor_set_target(motor, (uint32_t)util::hex2l(buffer));
 #endif
-        break;
+						break;
 
-      case 'P':
+					case 'P':
 #ifdef HIGH_RESOLUTION_MODE
-        motor_set_position(motor, util::hex2ul(buffer));
+						motor_set_position(motor, util::hex2ul(buffer));
 #else
-        motor_set_position(motor, (uint32_t)util::hex2l(buffer));
+						motor_set_position(motor, (uint32_t)util::hex2l(buffer));
 #endif
-        break;
+						break;
 
 #ifdef ENABLE_DTR_RESET
-      case 'Y':
-        set_dtr_reset((buffer[0] == '1') ? true : false);
-        break;
+					case 'Y':
+						set_dtr_reset((buffer[0] == '1') ? true : false);
+						break;
 #endif
-      }
-      break;
+				}
+				break;
 
-    default:
-      break;
-    }
-  }
+			default:
+				break;
+		}
+	}
 };
 
 static moonlite comms;

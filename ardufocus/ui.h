@@ -27,19 +27,19 @@
 #endif
 
 namespace UI {
-inline void setup() {
+	inline void setup() {
 #ifdef USE_UI_KAP
-  Keybd::setup();
+		Keybd::setup();
 #endif
-}
+	}
 
-inline void update_display() { ; }
+	inline void update_display() { ; }
 
-inline void fetch_key_state() {
+	inline void fetch_key_state() {
 #ifdef USE_UI_KAP
-  Keybd::tick();
+		Keybd::tick();
 #endif
-}
+	}
 } // namespace UI
 
 #endif

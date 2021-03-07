@@ -23,10 +23,10 @@
 #include "api.h"
 
 class protocol : protected api {
-  virtual void setup() = 0;
-  virtual void receive() = 0;
-  virtual void reply(const char *) = 0;
-  virtual void reply_P(const char *) = 0;
+	virtual void setup() = 0;
+	virtual void receive() = 0;
+	virtual void reply(const char*) = 0;
+	virtual void reply_P(const char*) = 0;
 };
 
 #endif

@@ -27,6 +27,6 @@ extern eeprom_map_t g_config;
 
 void dtr_disable();
 uint8_t dtr_reset_get();
-void dtr_reset(const bool &value);
+void dtr_reset(const bool& value);
 
 #endif

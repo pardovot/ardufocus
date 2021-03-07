@@ -28,44 +28,44 @@
 
 class a4988 : public stepper {
 public:
-  struct pinout_t {
-    pin_t ms1, ms2, ms3;
-    pin_t sleep, step, direction;
-  };
+	struct pinout_t {
+		pin_t ms1, ms2, ms3;
+		pin_t sleep, step, direction;
+	};
 
-  /*
-   *
-   *   A4988 STEP STICK PINOUT
-   *
-   *       .-----------.
-   * !ENA |o           o| VMOT
-   *  MS1 |o  -----    o| GND
-   *  MS2 |o |     |   o| 2B
-   *  MS3 |o |     |   o| 2A
-   * !RST |o  -----    o| 1A
-   * !SLP |o      ---  o| 1B
-   *  STP |o     | O | o| VDD
-   *  DIR |o      ---  o| GND
-   *       `-----------´
-   *
-   */
+	/*
+	 *
+	 *   A4988 STEP STICK PINOUT
+	 *
+	 *       .-----------.
+	 * !ENA |o           o| VMOT
+	 *  MS1 |o  -----    o| GND
+	 *  MS2 |o |     |   o| 2B
+	 *  MS3 |o |     |   o| 2A
+	 * !RST |o  -----    o| 1A
+	 * !SLP |o      ---  o| 1B
+	 *  STP |o     | O | o| VDD
+	 *  DIR |o      ---  o| GND
+	 *       `-----------´
+	 *
+	 */
 
 protected:
-  const pinout_t m_pinout;
+	const pinout_t m_pinout;
 
 private:
-  force_inline speed bool step();
+	force_inline speed bool step();
 
 public:
-  virtual void init();
-  virtual void halt();
-  virtual void sleep();
-  virtual void set_full_step();
-  virtual void set_half_step();
-  virtual speed bool step_cw();
-  virtual speed bool step_ccw();
+	virtual void init();
+	virtual void halt();
+	virtual void sleep();
+	virtual void set_full_step();
+	virtual void set_half_step();
+	virtual speed bool step_cw();
+	virtual speed bool step_ccw();
 
-  inline a4988(pinout_t const &pinout) : m_pinout({pinout}) { ; }
+	inline a4988(pinout_t const& pinout) : m_pinout({ pinout }) { ; }
 };
 
 #endif

@@ -30,29 +30,29 @@
 #include <util/atomic.h>
 
 class Analog {
-  /**
-   * Disable the creation of an instance of this object.
-   * This class should be used as a static class.
-   */
+	/**
+	 * Disable the creation of an instance of this object.
+	 * This class should be used as a static class.
+	 */
 private:
-  Analog() { ; }
-  ~Analog() { ; }
+	Analog() { ; }
+	~Analog() { ; }
 
 public:
-  static struct buffer_t {
-    uint8_t n;
-    uint8_t chan;
-    uint16_t raw[128];
-  } s_buffer;
+	static struct buffer_t {
+		uint8_t n;
+		uint8_t chan;
+		uint16_t raw[128];
+	} s_buffer;
 
-  static uint16_t s_cache[4];
+	static uint16_t s_cache[4];
 
 public:
-  static void setup();
-  static void read_async(const uint8_t &);
-  static uint16_t read(const uint8_t &channel) {
-    return ((channel > 3) ? 0 : s_cache[channel]);
-  }
+	static void setup();
+	static void read_async(const uint8_t&);
+	static uint16_t read(const uint8_t& channel) {
+		return ((channel > 3) ? 0 : s_cache[channel]);
+	}
 };
 
 #endif

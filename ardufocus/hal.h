@@ -32,29 +32,29 @@ enum hal_register_headers_t { IO_DIR, IO_DATA, IO_IN, IO_BIT };
     defined(__AVR_ATmega168P__)
 
 const uint16_t pin_map[][4] PROGMEM = {
-    // PIN                IO_DIR,           IO_DATA,            IO_IN, IO_BIT
-    /*   0 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(0)},
-    /*   1 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(1)},
-    /*   2 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(2)},
-    /*   3 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(3)},
-    /*   4 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(4)},
-    /*   5 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(5)},
-    /*   6 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(6)},
-    /*   7 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(7)},
+	// PIN                IO_DIR,           IO_DATA,            IO_IN, IO_BIT
+	/*   0 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(0)},
+	/*   1 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(1)},
+	/*   2 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(2)},
+	/*   3 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(3)},
+	/*   4 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(4)},
+	/*   5 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(5)},
+	/*   6 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(6)},
+	/*   7 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(7)},
 
-    /*   8 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(0)},
-    /*   9 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(1)},
-    /*  10 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(2)},
-    /*  11 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(3)},
-    /*  12 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(4)},
-    /*  13 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(5)},
+	/*   8 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(0)},
+	/*   9 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(1)},
+	/*  10 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(2)},
+	/*  11 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(3)},
+	/*  12 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(4)},
+	/*  13 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(5)},
 
-    /*  14 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(0)},
-    /*  15 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(1)},
-    /*  16 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(2)},
-    /*  17 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(3)},
-    /*  18 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(4)},
-    /*  19 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(5)},
+	/*  14 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(0)},
+	/*  15 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(1)},
+	/*  16 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(2)},
+	/*  17 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(3)},
+	/*  18 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(4)},
+	/*  19 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(5)},
 };
 
 #define USART_BRRH UBRR0H // Baud Rate Register High
@@ -84,34 +84,34 @@ const uint16_t pin_map[][4] PROGMEM = {
 #elif defined(__AVR_ATmega16U4__) || defined(__AVR_ATmega32U4__)
 
 const uint16_t pin_map[][4] PROGMEM = {
-    // PIN                IO_DIR,           IO_DATA,            IO_IN, IO_BIT
-    /*   0 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(2)},
-    /*   1 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(3)},
-    /*   2 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(1)},
-    /*   3 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(0)},
-    /*   4 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(4)},
-    /*   5 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(6)},
-    /*   6 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(7)},
-    /*   7 */ {(uint16_t)&DDRE, (uint16_t)&PORTE, (uint16_t)&PINE, bit(6)},
-    /*   8 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(4)},
-    /*   9 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(5)},
-    /*  10 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(6)},
+	// PIN                IO_DIR,           IO_DATA,            IO_IN, IO_BIT
+	/*   0 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(2)},
+	/*   1 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(3)},
+	/*   2 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(1)},
+	/*   3 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(0)},
+	/*   4 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(4)},
+	/*   5 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(6)},
+	/*   6 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(7)},
+	/*   7 */ {(uint16_t)&DDRE, (uint16_t)&PORTE, (uint16_t)&PINE, bit(6)},
+	/*   8 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(4)},
+	/*   9 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(5)},
+	/*  10 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(6)},
 
-    /*  11 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(7)},
-    /*  12 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(6)},
-    /*  13 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(7)},
+	/*  11 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(7)},
+	/*  12 */ {(uint16_t)&DDRD, (uint16_t)&PORTD, (uint16_t)&PIND, bit(6)},
+	/*  13 */ {(uint16_t)&DDRC, (uint16_t)&PORTC, (uint16_t)&PINC, bit(7)},
 
-    /*  14 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(3)},
-    /*  15 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(1)},
-    /*  16 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(2)},
-    /*  17 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(0)},
+	/*  14 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(3)},
+	/*  15 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(1)},
+	/*  16 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(2)},
+	/*  17 */ {(uint16_t)&DDRB, (uint16_t)&PORTB, (uint16_t)&PINB, bit(0)},
 
-    /*  18 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(7)},
-    /*  19 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(6)},
-    /*  20 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(5)},
-    /*  21 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(4)},
-    /*  22 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(1)},
-    /*  23 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(0)},
+	/*  18 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(7)},
+	/*  19 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(6)},
+	/*  20 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(5)},
+	/*  21 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(4)},
+	/*  22 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(1)},
+	/*  23 */ {(uint16_t)&DDRF, (uint16_t)&PORTF, (uint16_t)&PINF, bit(0)},
 };
 
 #define USART_BRRH UBRR1H // Baud Rate Register High
@@ -133,7 +133,7 @@ const uint16_t pin_map[][4] PROGMEM = {
 #define USART_TX_VECT USART1_UDRE_vect
 
 #else
-const uint16_t pin_map[][0] PROGMEM = {{}};
+const uint16_t pin_map[][0] PROGMEM = { {} };
 
 #error No supported platform found
 #error Please file a bug at https://github.com/jbrazio/ardufocus/issues

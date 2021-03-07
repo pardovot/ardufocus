@@ -26,28 +26,28 @@
 #include "io.h"
 
 class Keybd {
-  /**
-   * Disable the creation of an instance of this object.
-   * This class should be used as a static class.
-   */
+	/**
+	 * Disable the creation of an instance of this object.
+	 * This class should be used as a static class.
+	 */
 private:
-  Keybd() { ; }
-  ~Keybd() { ; }
+	Keybd() { ; }
+	~Keybd() { ; }
 
-  typedef void (*callback_t)(const bool &);
+	typedef void (*callback_t)(const bool&);
 
 private:
-  static motor_t motor;
-  static bool inited;
+	static motor_t motor;
+	static bool inited;
 
 public:
-  static void setup();
-  static void tick();
-  static void debounce(bool &, bool &, bool &, uint8_t &, const uint8_t &);
+	static void setup();
+	static void tick();
+	static void debounce(bool&, bool&, bool&, uint8_t&, const uint8_t&);
 
 public:
-  static callback_t event_fwd_pressed();
-  static callback_t event_bwd_pressed();
+	static callback_t event_fwd_pressed();
+	static callback_t event_bwd_pressed();
 };
 
 #endif

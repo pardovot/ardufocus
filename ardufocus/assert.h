@@ -20,7 +20,7 @@
 #ifndef __ASSERT_H__
 #define __ASSERT_H__
 
-// Defaults -------------------------------------------------------------------
+ // Defaults -------------------------------------------------------------------
 #define TIMER0_PSCL 64
 #define TIMER0_FREQ 5000L // Hz
 #define TIMER0_OCRA (((F_CPU / TIMER0_PSCL) / TIMER0_FREQ) - 1)
@@ -215,7 +215,7 @@
 #endif
 #endif
 
-// USER INTERFACE: Keyboard ---------------------------------------------------
+	// USER INTERFACE: Keyboard ---------------------------------------------------
 #if defined(USE_UI_KAP)
 #if defined(UI_KAP_BUTTON_DEBOUNCE) &&                                         \
     (UI_KAP_BUTTON_DEBOUNCE < 1 || UI_KAP_BUTTON_DEBOUNCE > 255)

@@ -1,3 +1,4 @@
 .pioenvs
 .piolibdeps
 ardufocus/localcfg.h
+ardufocus/.vs/
